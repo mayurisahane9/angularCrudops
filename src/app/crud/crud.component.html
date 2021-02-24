@@ -1,0 +1,154 @@
+
+<div class="progress mt-3 container-fluid ">
+  <div class="progress-bar" role="progressbar" [ngStyle]="{'width':''+progress+'%'}"
+  aria-valuenow="" aria-valuemin="0" aria-valuemax="100">{{progressPerc}}%</div>
+</div>
+<app-modal-animation #modalCrud [modalClass]="'crud'" [modalID]="'crud'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      <span *ngIf="model.id">Edit </span> <span >Add  </span>
+    </h4>
+    <button type="button" class="close basic-close" (click)="_common.hideModal('crud'); ">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body" class="src">
+<div class="card">
+    <div class="card-body mobile-inputs">
+      <form [formGroup]="angForm" (ngSubmit)="addform()" ngValidate >
+        <div class="form-group">
+          <label class="col-md-6">Employee Name</label>
+          <input type="text" class="form-control" [(ngModel)]="model.employee_name" formControlName="employee_name" #employee_name />
+        </div>
+        <!-- <div  class="alert alert-danger">
+          <div>
+            Name is required.
+          </div>
+        </div> -->
+        <div class="form-group">
+          <label class="col-md-6">Employee Address</label>
+          <input type="text" class="form-control" [(ngModel)]="model.employee_address" formControlName="employee_address" #employee_address required/>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-6">Employee Contact</label>
+          <input type="number" (change)="_common.field_validate($event,'mobile',model.employee_contact)" class="form-control" formControlName="employee_contact" [(ngModel)]="model.employee_contact" #employee_contact />
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-6">Employee Email</label>
+          <input type="email" class="form-control" formControlName="employee_email" [(ngModel)]="model.employee_email" #employee_email />
+        </div>
+          <div class="form-group">
+            <button  class="btn btn-primary">Save</button>
+          </div>
+      </form>
+    </div>
+  </div>
+  </div>
+</app-modal-animation>
+
+
+<!-- VIEW MODAL -->
+<app-modal-animation #modalCrud [modalClass]="'view'" [modalID]="'view'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      <span>Employee ID : {{model.id}}  </span>
+    </h4>
+    <button type="button" class="close basic-close" (click)="_common.hideModal('view'); ">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body" class="src">
+    <div class="card">
+        <div class="card-body mobile-inputs">
+
+         <span> <b>Name :</b> {{model.employee_name}}</span><br>
+         <span>  <b> Address :</b> {{model.employee_address}}</span><br>
+         <span>  <b>Contact : </b>{{model.employee_contact}}</span><br>
+         <span>  <b>Email : </b>{{model.employee_email}}</span><br>
+          </div>
+     </div>
+ </div>
+
+</app-modal-animation>
+
+
+
+
+
+  <!-- TABLE -->
+  <div class="container-fluid ">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-header border-0 ">
+         
+          <button type="button"  class="btn btn-primary btn-md ml-4 mt-2"(click)="_common.showModal('crud');model={}"
+            >Add</button>
+        </div>
+        <div class="card-body ">
+          <ngx-datatable #table class='material striped' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
+            [rowHeight]="'auto'" [count]="page.count" [offset]="page.offset"
+            [limit]="page.limit" [rows]='tabrows' >
+      
+            <ngx-datatable-column name="Id" [flexGrow]="0.3">
+              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <!-- {{row.id}} -->
+                {{rowIndex+1}}
+              </ng-template>
+         
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Name" [flexGrow]="1">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{row.employee_name}}                
+              </ng-template>
+            </ngx-datatable-column>
+        
+            <ngx-datatable-column name="Address" [flexGrow]="0.8">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{row.employee_address}}  
+              </ng-template>
+            </ngx-datatable-column>
+  
+    
+  
+            <ngx-datatable-column name="Contact" [flexGrow]="0.8">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+             
+                {{row.employee_contact}}  
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Email" [flexGrow]="1">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{row.employee_email}}  
+              </ng-template>
+            </ngx-datatable-column>
+        
+  
+            <ngx-datatable-column name="Action" [flexGrow]="1" >
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div class="row">
+                <div class="col-sm-3">
+                <button class= 'btn-sm btn-info' (click)="setModel(row);_common.showModal('crud')">Edit </button>
+                </div>
+                <div class="col-sm-3">
+                <button class= 'btn-sm btn-primary' (click)='deleteEmployee(row)'>Delete </button>
+                </div>
+                <div class="col-sm-3">
+                  <button class= 'btn-sm btn-primary' (click)="setModel(row);_common.showModal('view')">View </button>
+                  </div>
+             </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+  <!-- END -->
+  
